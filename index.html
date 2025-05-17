@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chadi Chammout | Développeur Web Full-Stack</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- Cursor Animation Elements -->
+    <div class="cursor-container">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">Chadi Chammout</div>
+        <nav>
+            <ul>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#projects">Projets</a></li>
+                <li><a href="#skills">Compétences</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Section Hero -->
+    <section id="about" class="hero">
+        <div class="container">
+            <h1>Développeur Web Full-Stack</h1>
+            <p>Basé à Genève, je crée des expériences web fluides et interactives. Je combine design minimaliste et code propre pour développer des applications web performantes et esthétiques.</p>
+            <div class="scroll-indicator">
+                <span>DÉCOUVRIR</span>
+                <div class="arrow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Projets -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Projets Sélectionnés</h2>
+            <div class="projects-grid">
+                <!-- Projet 1: Camila Flores -->
+                <div class="project">
+                    <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                        <h4 style="color: white; margin-bottom: 10px;">Camila Flores J.</h4>
+                        <p style="color: #e6e6e6; font-size: 14px;">Portfolio Designer</p>
+                        <video class="project-video" muted loop playsinline>
+                            <source src="assets/videos/camilavideo.webm" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="project-overlay">
+                        <h3 class="project-title">Camila Flores J.</h3>
+                        <p class="project-category">Portfolio Designer</p>
+                        <p class="project-description">Site portfolio pour une designer d'intérieur basée à Genève, présentant ses projets et réalisations dans un design élégant et minimaliste.</p>
+                        <a href="https://camilafloresj.ch/" target="_blank" class="project-link">Voir le site</a>
+                    </div>
+                </div>
+                <!-- Projet 2: Locoto -->
+                <div class="project">
+                    <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                        <h4 style="color: white; margin-bottom: 10px;">Locoto</h4>
+                        <p style="color: #e6e6e6; font-size: 14px;">Application de gestion de véhicules</p>
+                    </div>
+                    <div class="project-overlay">
+                        <h3 class="project-title">Locoto</h3>
+                        <p class="project-category">Application Web</p>
+                        <p class="project-description">Application de gestion de véhicules de location permettant aux propriétaires de suivre leurs locations avec calendrier, statistiques et génération de contrats PDF.</p>
+                        <div class="project-tech">
+                            <span>React</span>
+                            <span>Redux</span>
+                            <span>Node.js</span>
+                            <span>MongoDB</span>
+                        </div>
+                        <a href="https://locoto.vercel.app/login" target="_blank" class="project-link">Voir le projet</a>
+                    </div>
+                </div>
+                <!-- Projet 3: Premier Portfolio -->
+                <div class="project">
+                    <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                        <h4 style="color: white; margin-bottom: 10px;">Premier Portfolio</h4>
+                        <p style="color: #e6e6e6; font-size: 14px;">Projet Scolaire</p>
+                    </div>
+                    <div class="project-overlay">
+                        <h3 class="project-title">Premier Portfolio</h3>
+                        <p class="project-category">Projet Scolaire / Portfolio Personnel</p>
+                        <p class="project-description">Mon premier portfolio créé dans le cadre d'un projet scolaire. Bien qu'il ne corresponde plus à mon identité actuelle, ce projet représente une étape importante dans mon parcours de développeur web.</p>
+                        <a href="https://chadicham.vercel.app/" target="_blank" class="project-link">Voir le site</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Compétences -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>Compétences</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>HTML5 / CSS3</li>
+                        <li>JavaScript</li>
+                        <li>React</li>
+                        <li>Redux</li>
+                        <li>Material-UI</li>
+                        <li>GSAP</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Node.js</li>
+                        <li>Express</li>
+                        <li>MongoDB</li>
+                        <li>API RESTful</li>
+                        <li>Stripe Integration</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h3>Outils &amp; Méthodes</h3>
+                    <ul>
+                        <li>Git / GitHub</li>
+                        <li>Responsive Design</li>
+                        <li>Vite</li>
+                        <li>UI/UX Design</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact">
+        <div class="container">
+            <h2>Contact</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p>Intéressé par une collaboration ou vous avez des questions ?</p>
+                    <p>N'hésitez pas à me contacter.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/chadicham" target="_blank">GitHub</a>
+                    <a href="https://www.linkedin.com/in/chadi-chammout-454320228/" target="_blank">LinkedIn</a>
+                    <a href="mailto:chadi.chammout@gmail.com">Email</a>
+                </div>
+            </div>
+            <p class="copyright">© 2025 Chadi Chammout. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
