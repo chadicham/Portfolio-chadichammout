@@ -100,16 +100,18 @@ header.scrolled {
     color: var(--text-color);
 }
 
-nav ul {
+/* Desktop Navigation */
+
+.desktop-nav ul {
     display: flex;
     list-style: none;
 }
 
-nav li {
+.desktop-nav li {
     margin-left: 2rem;
 }
 
-nav a {
+.desktop-nav a {
     color: var(--text-color);
     text-decoration: none;
     position: relative;
@@ -118,7 +120,7 @@ nav a {
     transition: all 0.3s;
 }
 
-nav a:after {
+.desktop-nav a:after {
     content: '';
     position: absolute;
     width: 0;
@@ -129,12 +131,84 @@ nav a:after {
     transition: width 0.3s;
 }
 
-nav a:hover {
+.desktop-nav a:hover {
     color: var(--text-color);
 }
 
-nav a:hover:after {
+.desktop-nav a:hover:after {
     width: 100%;
+}
+
+/* Mobile Navigation Toggle Button */
+.mobile-nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.mobile-nav-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-color);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.mobile-nav-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.mobile-nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-nav-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile Navigation Menu */
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background-color: var(--secondary-color);
+    padding: 6rem 2rem 2rem;
+    transition: right 0.3s ease;
+    z-index: 15;
+}
+
+.mobile-nav.active {
+    right: 0;
+}
+
+.mobile-nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.mobile-nav li {
+    margin: 1.5rem 0;
+}
+
+.mobile-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+/* Prevent scrolling when mobile menu is open */
+body.no-scroll {
+    overflow: hidden;
 }
 
 /* Hero Section */
@@ -518,6 +592,15 @@ social-links a:hover:after {
     
     section {
         padding: 6rem 0;
+    }
+    
+    /* Mobile Navigation */
+    .desktop-nav {
+        display: none;
+    }
+    
+    .mobile-nav-toggle {
+        display: flex;
     }
 }
 

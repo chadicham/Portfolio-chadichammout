@@ -13,6 +13,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    // Mobile Navigation
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const mobileNav = document.querySelector('.mobile-nav');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+    
+    // Toggle du menu mobile
+    mobileNavToggle.addEventListener('click', () => {
+        mobileNavToggle.classList.toggle('active');
+        mobileNav.classList.toggle('active');
+        document.body.classList.toggle('no-scroll');
+    });
+    
+    // Fermer le menu mobile quand un lien est cliqué
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileNavToggle.classList.remove('active');
+            mobileNav.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        });
+    });
+    
     // Animation de la section hero
     gsap.to('.hero h1', {
         opacity: 1,
