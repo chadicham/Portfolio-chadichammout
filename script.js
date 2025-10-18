@@ -106,45 +106,182 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Animation du trail de souris
-    const coords = { x: 0, y: 0 };
-    const circles = document.querySelectorAll(".circle");
+    // Target Cursor - Animation de curseur avec coins
+    const targetCursor = document.createElement('div');
+    targetCursor.className = 'target-cursor-wrapper';
     
-    // Configuration initiale des cercles
-    circles.forEach(function (circle, index) {
-        circle.x = 0;
-        circle.y = 0;
-        circle.style.backgroundColor = "#ffffff"; // Couleur blanche pour tous les cercles
+    // Créer le point central
+    const cursorDot = document.createElement('div');
+    cursorDot.className = 'target-cursor-dot';
+    targetCursor.appendChild(cursorDot);
+    
+    // Créer les 4 coins
+    const corners = ['tl', 'tr', 'br', 'bl'].map(pos => {
+        const corner = document.createElement('div');
+        corner.className = `target-cursor-corner corner-${pos}`;
+        targetCursor.appendChild(corner);
+        return corner;
     });
     
-    // Suivre la position de la souris
-    window.addEventListener("mousemove", function(e) {
-        coords.x = e.clientX;
-        coords.y = e.clientY;
+    document.body.appendChild(targetCursor);
+    
+    // Cacher le curseur par défaut
+    document.body.style.cursor = 'none';
+    
+    // Variables pour l'animation
+    let activeTarget = null;
+    let spinAnimation = null;
+    const constants = {
+        borderWidth: 3,
+        cornerSize: 12,
+        parallaxStrength: 0.00005
+    };
+    
+    // Position initiale
+    gsap.set(targetCursor, {
+        xPercent: -50,
+        yPercent: -50,
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2
     });
     
-    function animateCircles() {
-        let x = coords.x;
-        let y = coords.y;
-        
-        circles.forEach(function (circle, index) {
-            circle.style.left = x - 2 + "px";
-            circle.style.top = y - 12 + "px";
-            
-            circle.style.scale = (circles.length - index) / circles.length;
-            
-            circle.x = x;
-            circle.y = y;
-            
-            const nextCircle = circles[index + 1] || circles[0];
-            x += (nextCircle.x - x) * 0.3;
-            y += (nextCircle.y - y) * 0.3;
+    // Animation de rotation continue
+    const startSpinning = () => {
+        if (spinAnimation) spinAnimation.kill();
+        spinAnimation = gsap.to(targetCursor, {
+            rotation: '+=360',
+            duration: 2,
+            ease: 'none',
+            repeat: -1
         });
-        
-        requestAnimationFrame(animateCircles);
-    }
+    };
     
-    animateCircles();
+    startSpinning();
+    
+    // Suivre la souris
+    window.addEventListener('mousemove', (e) => {
+        gsap.to(targetCursor, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.1,
+            ease: 'power3.out'
+        });
+    });
+    
+    // Animation au clic
+    window.addEventListener('mousedown', () => {
+        gsap.to(cursorDot, { scale: 0.7, duration: 0.3 });
+        gsap.to(targetCursor, { scale: 0.9, duration: 0.2 });
+    });
+    
+    window.addEventListener('mouseup', () => {
+        gsap.to(cursorDot, { scale: 1, duration: 0.3 });
+        gsap.to(targetCursor, { scale: 1, duration: 0.2 });
+    });
+    
+    // Fonction pour mettre à jour les coins
+    const updateCorners = (target, mouseX, mouseY) => {
+        const rect = target.getBoundingClientRect();
+        const cursorRect = targetCursor.getBoundingClientRect();
+        
+        const cursorCenterX = cursorRect.left + cursorRect.width / 2;
+        const cursorCenterY = cursorRect.top + cursorRect.height / 2;
+        
+        const [tlc, trc, brc, blc] = corners;
+        const { borderWidth, cornerSize, parallaxStrength } = constants;
+        
+        let offsets = [
+            { x: rect.left - cursorCenterX - borderWidth, y: rect.top - cursorCenterY - borderWidth },
+            { x: rect.right - cursorCenterX + borderWidth - cornerSize, y: rect.top - cursorCenterY - borderWidth },
+            { x: rect.right - cursorCenterX + borderWidth - cornerSize, y: rect.bottom - cursorCenterY + borderWidth - cornerSize },
+            { x: rect.left - cursorCenterX - borderWidth, y: rect.bottom - cursorCenterY + borderWidth - cornerSize }
+        ];
+        
+        // Effet parallaxe
+        if (mouseX !== undefined && mouseY !== undefined) {
+            const targetCenterX = rect.left + rect.width / 2;
+            const targetCenterY = rect.top + rect.height / 2;
+            const mouseOffsetX = (mouseX - targetCenterX) * parallaxStrength;
+            const mouseOffsetY = (mouseY - targetCenterY) * parallaxStrength;
+            
+            offsets.forEach(offset => {
+                offset.x += mouseOffsetX;
+                offset.y += mouseOffsetY;
+            });
+        }
+        
+        corners.forEach((corner, index) => {
+            gsap.to(corner, {
+                x: offsets[index].x,
+                y: offsets[index].y,
+                duration: 0.2,
+                ease: 'power2.out'
+            });
+        });
+    };
+    
+    // Réinitialiser les coins
+    const resetCorners = () => {
+        const { cornerSize } = constants;
+        const positions = [
+            { x: -cornerSize * 1.5, y: -cornerSize * 1.5 },
+            { x: cornerSize * 0.5, y: -cornerSize * 1.5 },
+            { x: cornerSize * 0.5, y: cornerSize * 0.5 },
+            { x: -cornerSize * 1.5, y: cornerSize * 0.5 }
+        ];
+        
+        corners.forEach((corner, index) => {
+            gsap.to(corner, {
+                x: positions[index].x,
+                y: positions[index].y,
+                duration: 0.3,
+                ease: 'power3.out'
+            });
+        });
+    };
+    
+    // Gérer les éléments cliquables
+    const clickableSelector = 'a, button, .project, .back-to-top, .mobile-nav-toggle, [role="button"]';
+    
+    window.addEventListener('mouseover', (e) => {
+        const target = e.target.closest(clickableSelector);
+        
+        if (target && target !== activeTarget) {
+            activeTarget = target;
+            
+            // Arrêter la rotation
+            if (spinAnimation) {
+                spinAnimation.pause();
+                gsap.set(targetCursor, { rotation: 0 });
+            }
+            
+            // Mettre à jour les coins
+            updateCorners(target);
+            
+            // Suivre le mouvement sur l'élément
+            const mouseMoveHandler = (ev) => {
+                updateCorners(target, ev.clientX, ev.clientY);
+            };
+            
+            const mouseLeaveHandler = () => {
+                activeTarget = null;
+                target.removeEventListener('mousemove', mouseMoveHandler);
+                target.removeEventListener('mouseleave', mouseLeaveHandler);
+                
+                resetCorners();
+                
+                // Reprendre la rotation
+                setTimeout(() => {
+                    if (!activeTarget) {
+                        startSpinning();
+                    }
+                }, 50);
+            };
+            
+            target.addEventListener('mousemove', mouseMoveHandler);
+            target.addEventListener('mouseleave', mouseLeaveHandler);
+        }
+    });
     
     // Animation des liens de navigation
     const navLinks = document.querySelectorAll('nav a');
