@@ -1,9 +1,9 @@
 :root {
-    --bg-color: #121212;
+    --bg-color: #0a0a0a;
     --text-color: #ffffff;
     --accent-color: #64ffda;
-    --secondary-color: #1e1e1e;
-    --hover-color: #2d2d2d;
+    --secondary-color: #0a0a0a; /* Même couleur que le background principal */
+    --hover-color: #1a1a1a;
     --cursor-color: #ffffff; /* Définir la couleur des cercles en blanc */
     --font-sans: 'Inter', sans-serif;
 }
@@ -25,6 +25,24 @@ body {
     overflow-x: hidden;
     font-weight: 300;
     line-height: 1.6;
+    position: relative;
+}
+
+/* Plasma Background */
+.plasma-background {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 1400px;
+    height: 80vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0.8;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 80%);
 }
 
 /* Layout */
@@ -124,7 +142,7 @@ header {
     justify-content: space-between;
     align-items: center;
     backdrop-filter: blur(10px);
-    background-color: rgba(18, 18, 18, 0.8);
+    background-color: rgba(10, 10, 10, 0.9);
     transition: all 0.3s ease;
 }
 
