@@ -1,0 +1,25 @@
+# Autoriser tous les moteurs de recherche légitimes
+User-agent: *
+Allow: /
+
+# Bloquer les bots malveillants connus pour le scraping d'emails
+User-agent: EmailCollector
+Disallow: /
+
+User-agent: EmailSiphon
+Disallow: /
+
+User-agent: EmailWolf
+Disallow: /
+
+User-agent: ExtractorPro
+Disallow: /
+
+User-agent: CherryPicker
+Disallow: /
+
+User-agent: WebBandit
+Disallow: /
+
+# Sitemap
+Sitemap: https://votresite.com/sitemap.xml

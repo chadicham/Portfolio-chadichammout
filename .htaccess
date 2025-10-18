@@ -1,0 +1,9 @@
+# Protection contre les bots collecteurs d'emails
+RewriteEngine On
+RewriteCond %{HTTP_USER_AGENT} ^.*(EmailCollector|EmailSiphon|EmailWolf|ExtractorPro|CherryPicker|WebBandit).*$ [NC]
+RewriteRule .* - [F,L]
+
+# Protection contre le hotlinking
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?votredomaine\.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [NC,F,L]

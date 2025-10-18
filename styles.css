@@ -561,8 +561,16 @@ footer {
     color: var(--accent-color);
 }
 
-social-links a:hover:after {
+.social-links a:hover:after {
     width: 100%;
+}
+
+/* Email obfusqué - afficher au survol */
+.email-obfuscated[data-email]:hover::after {
+    content: " (" attr(data-email) ")";
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    margin-left: 0.5rem;
 }
 
 .copyright {

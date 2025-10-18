@@ -366,4 +366,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
+    // Protection anti-spam pour l'email
+    const emailLink = document.getElementById('email-link');
+    if (emailLink) {
+        // Email obfusqué (inversé et encodé)
+        const user = 'tuommahc.idahc';
+        const domain = 'moc.liamg';
+        const email = user.split('').reverse().join('') + '@' + domain.split('').reverse().join('');
+        
+        emailLink.href = 'mailto:' + email;
+        emailLink.setAttribute('title', 'Envoyer un email');
+        
+        // Optionnel : afficher l'email au survol
+        emailLink.addEventListener('mouseenter', function() {
+            this.setAttribute('data-email', email);
+        });
+    }
 });
