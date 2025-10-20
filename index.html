@@ -10,8 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="plasma.js"></script>
 </head>
 <body>
+    <!-- Plasma Background -->
+    <div id="plasma-bg" class="plasma-background"></div>
     <!-- Cursor Animation Elements -->
     <div class="cursor-container">
         <div class="circle"></div>
@@ -79,7 +82,26 @@
         <div class="container">
             <h2>Projets Sélectionnés</h2>
             <div class="projects-grid">
-                <!-- Projet 1: Camila Flores -->
+                <!-- Projet 1: Pilky Design -->
+                <div class="project">
+                    <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                        <h4 style="color: white; margin-bottom: 10px;">Pilky Design</h4>
+                        <p style="color: #e6e6e6; font-size: 14px;">Site vitrine d'agence de design</p>
+                    </div>
+                    <div class="project-overlay">
+                        <h3 class="project-title">Pilky Design</h3>
+                        <p class="project-category">Site Vitrine / Agence de Design</p>
+                        <p class="project-description">Site vitrine moderne pour une agence de design créatif, mettant en avant leurs services et réalisations avec des animations fluides et un design épuré.</p>
+                        <div class="project-tech">
+                            <span>HTML5</span>
+                            <span>CSS3</span>
+                            <span>JavaScript</span>
+                            <span>Animations</span>
+                        </div>
+                        <a href="https://www.pilkydesign.com/" target="_blank" rel="noopener noreferrer" class="project-link">Voir le site</a>
+                    </div>
+                </div>
+                <!-- Projet 2: Camila Flores -->
                 <div class="project">
                     <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
                         <h4 style="color: white; margin-bottom: 10px;">Camila Flores J.</h4>
@@ -92,10 +114,10 @@
                         <h3 class="project-title">Camila Flores J.</h3>
                         <p class="project-category">Portfolio Designer</p>
                         <p class="project-description">Site portfolio pour une designer d'intérieur basée à Genève, présentant ses projets et réalisations dans un design élégant et minimaliste.</p>
-                        <a href="https://camilafloresj.ch/" target="_blank" class="project-link">Voir le site</a>
+                        <a href="https://camilafloresj.ch/" target="_blank" rel="noopener noreferrer" class="project-link">Voir le site</a>
                     </div>
                 </div>
-                <!-- Projet 2: Locoto -->
+                <!-- Projet 3: Locoto -->
                 <div class="project">
                     <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
                         <h4 style="color: white; margin-bottom: 10px;">Locoto</h4>
@@ -111,10 +133,10 @@
                             <span>Node.js</span>
                             <span>MongoDB</span>
                         </div>
-                        <a href="https://locoto.vercel.app/login" target="_blank" class="project-link">Voir le projet</a>
+                        <a href="https://locoto.vercel.app/login" target="_blank" rel="noopener noreferrer" class="project-link">Voir le projet</a>
                     </div>
                 </div>
-                <!-- Projet 3: Premier Portfolio -->
+                <!-- Projet 4: Premier Portfolio -->
                 <div class="project">
                     <div class="project-image" style="background-color: #2a2a2a; display: flex; justify-content: center; align-items: center; flex-direction: column;">
                         <h4 style="color: white; margin-bottom: 10px;">Premier Portfolio</h4>
@@ -124,7 +146,7 @@
                         <h3 class="project-title">Premier Portfolio</h3>
                         <p class="project-category">Projet Scolaire / Portfolio Personnel</p>
                         <p class="project-description">Mon premier portfolio créé dans le cadre d'un projet scolaire. Bien qu'il ne corresponde plus à mon identité actuelle, ce projet représente une étape importante dans mon parcours de développeur web.</p>
-                        <a href="https://chadicham.vercel.app/" target="_blank" class="project-link">Voir le site</a>
+                        <a href="https://chadicham.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link">Voir le site</a>
                     </div>
                 </div>
             </div>
