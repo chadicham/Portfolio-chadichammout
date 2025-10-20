@@ -1,5 +1,18 @@
 // Attendre que le DOM soit complètement chargé
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialiser le background Plasma
+    const plasmaContainer = document.getElementById('plasma-bg');
+    if (plasmaContainer && window.PlasmaBackground) {
+        new PlasmaBackground(plasmaContainer, {
+            color: '#64ffda',      // Couleur accent de votre portfolio
+            speed: 0.4,            // Vitesse de l'animation (réduite)
+            direction: 'forward',  // Direction: 'forward', 'reverse'
+            scale: 0.6,            // Échelle réduite pour concentrer au centre
+            opacity: 0.2,          // Opacité augmentée légèrement
+            mouseInteractive: true // Interaction avec la souris
+        });
+    }
+    
     // Initialiser GSAP
     gsap.registerPlugin(ScrollTrigger);
     
