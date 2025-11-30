@@ -40,21 +40,28 @@
     </div>
 
     <!-- Header -->
-    <header>
-        <div class="logo">Chadi Chammout</div>
-        <div class="mobile-nav-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+    <header id="navbar">
+        <div class="navbar-pill">
+            <div class="logo" id="logo-shuffle">Chadi Chammout</div>
+            
+            <nav class="nav-links">
+                <div class="nav-background"></div>
+                <a href="#about" class="nav-link active" data-section="about">À propos</a>
+                <a href="#projects" class="nav-link" data-section="projects">Projets</a>
+                <a href="#skills" class="nav-link" data-section="skills">Compétences</a>
+                <div class="nav-separator"></div>
+                <a href="#contact" class="cta-button">Contact</a>
+            </nav>
+            
+            <div class="mobile-nav-toggle">
+                <div>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
-        <nav class="desktop-nav">
-            <ul>
-                <li><a href="#about">À propos</a></li>
-                <li><a href="#projects">Projets</a></li>
-                <li><a href="#skills">Compétences</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+        
         <nav class="mobile-nav">
             <ul>
                 <li><a href="#about">À propos</a></li>
@@ -231,6 +238,7 @@
     </footer>
 
     <script src="plasma.js"></script>
+    <script src="shuffle.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

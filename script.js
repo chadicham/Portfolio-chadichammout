@@ -16,14 +16,121 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialiser GSAP
     gsap.registerPlugin(ScrollTrigger);
     
-    // Animation du header au scroll
-    const header = document.querySelector('header');
+    // Navbar auto-hide/show behavior
+    const navbar = document.getElementById('navbar');
+    let lastScrollY = 0;
+    let showNavbar = true;
+    let isAnimating = false;
+    
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        const currentScrollY = window.scrollY;
+        
+        // Cache la navbar après 100px de scroll vers le bas
+        if (currentScrollY > 100 && currentScrollY > lastScrollY && showNavbar) {
+            navbar.classList.add('hidden');
+            showNavbar = false;
+        } 
+        // Montre la navbar en scrollant vers le haut
+        else if (currentScrollY < lastScrollY && !showNavbar) {
+            navbar.classList.remove('hidden');
+            navbar.classList.add('animating');
+            showNavbar = true;
+            isAnimating = true;
+            setTimeout(() => {
+                navbar.classList.remove('animating');
+                isAnimating = false;
+            }, 700);
         }
+        
+        lastScrollY = currentScrollY;
+    });
+    
+    // Montre la navbar au survol du haut de la page
+    document.addEventListener('mousemove', (e) => {
+        if (e.clientY < 100 && !showNavbar) {
+            navbar.classList.remove('hidden');
+            navbar.classList.add('animating');
+            showNavbar = true;
+            isAnimating = true;
+            setTimeout(() => {
+                navbar.classList.remove('animating');
+                isAnimating = false;
+            }, 700);
+        }
+    });
+    
+    // Navigation links hover effect
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navBackground = document.querySelector('.nav-background');
+    let hoverTimeout = null;
+    
+    const updateBackgroundPosition = (element, show = true) => {
+        if (!element || !navBackground) return;
+        
+        const navLinksContainer = element.closest('.nav-links');
+        const containerRect = navLinksContainer.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const offsetX = elementRect.left - containerRect.left;
+        
+        navBackground.style.opacity = show ? '1' : '0';
+        navBackground.style.transform = `translateX(${offsetX}px)`;
+        navBackground.style.width = `${elementRect.width}px`;
+        navBackground.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+    };
+    
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', (e) => {
+            if (hoverTimeout) {
+                clearTimeout(hoverTimeout);
+                hoverTimeout = null;
+            }
+            navBackground.classList.add('active');
+            updateBackgroundPosition(e.currentTarget);
+        });
+    });
+    
+    document.querySelector('.nav-links')?.addEventListener('mouseleave', () => {
+        hoverTimeout = setTimeout(() => {
+            const activeLink = document.querySelector('.nav-link.active');
+            if (activeLink) {
+                navBackground.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                updateBackgroundPosition(activeLink);
+            } else {
+                navBackground.classList.remove('active');
+            }
+        }, 1000);
+    });
+    
+    // Position initial du background sur l'élément actif
+    const activeLink = document.querySelector('.nav-link.active');
+    if (activeLink) {
+        setTimeout(() => {
+            navBackground.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            updateBackgroundPosition(activeLink);
+        }, 100);
+    }
+    
+    // Mettre à jour l'élément actif selon la section visible
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.scrollY >= sectionTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === current) {
+                link.classList.add('active');
+                if (!hoverTimeout && navBackground) {
+                    navBackground.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    updateBackgroundPosition(link);
+                }
+            }
+        });
     });
     
     // Mobile Navigation
@@ -314,20 +421,22 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('📱 Curseur personnalisé désactivé (Mobile/Tablette ou écran tactile)');
     }
     
-    // Animation des liens de navigation
-    const navLinks = document.querySelectorAll('nav a');
+    // Animation des liens de navigation (smooth scroll)
+    const allNavLinks = document.querySelectorAll('nav a, .nav-link');
     
-    navLinks.forEach(link => {
+    allNavLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
             
-            window.scrollTo({
-                top: targetSection.offsetTop - 100,
-                behavior: 'smooth'
-            });
+            if (targetSection) {
+                window.scrollTo({
+                    top: targetSection.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
         });
     });
     
