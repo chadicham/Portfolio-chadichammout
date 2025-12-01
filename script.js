@@ -226,6 +226,240 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    // Target Cursor - Mode Visée (Desktop uniquement, activable)
+    const isTouchDevice = () => {
+        return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+    };
+    
+    const isMobileScreen = () => {
+        return window.innerWidth <= 1024;
+    };
+    
+    // Initialiser le curseur seulement sur desktop
+    if (!isTouchDevice() && !isMobileScreen()) {
+        const cursorToggleBtn = document.getElementById('cursor-toggle');
+        let cursorEnabled = false;
+        let targetCursor = null;
+        let cursorDot = null;
+        let corners = [];
+        let activeTarget = null;
+        let spinAnimation = null;
+        
+        const constants = {
+            borderWidth: 3,
+            cornerSize: 12,
+            parallaxStrength: 0.00005
+        };
+        
+        const createCursor = () => {
+            targetCursor = document.createElement('div');
+            targetCursor.className = 'target-cursor-wrapper';
+            
+            cursorDot = document.createElement('div');
+            cursorDot.className = 'target-cursor-dot';
+            targetCursor.appendChild(cursorDot);
+            
+            corners = ['tl', 'tr', 'br', 'bl'].map(pos => {
+                const corner = document.createElement('div');
+                corner.className = `target-cursor-corner corner-${pos}`;
+                targetCursor.appendChild(corner);
+                return corner;
+            });
+            
+            document.body.appendChild(targetCursor);
+            
+            gsap.set(targetCursor, {
+                xPercent: -50,
+                yPercent: -50,
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2
+            });
+        };
+        
+        const startSpinning = () => {
+            if (spinAnimation) spinAnimation.kill();
+            spinAnimation = gsap.to(targetCursor, {
+                rotation: '+=360',
+                duration: 2,
+                ease: 'none',
+                repeat: -1
+            });
+        };
+        
+        const updateCorners = (target, mouseX, mouseY) => {
+            const rect = target.getBoundingClientRect();
+            const cursorRect = targetCursor.getBoundingClientRect();
+            
+            const cursorCenterX = cursorRect.left + cursorRect.width / 2;
+            const cursorCenterY = cursorRect.top + cursorRect.height / 2;
+            
+            const { borderWidth, cornerSize, parallaxStrength } = constants;
+            
+            let offsets = [
+                { x: rect.left - cursorCenterX - borderWidth, y: rect.top - cursorCenterY - borderWidth },
+                { x: rect.right - cursorCenterX + borderWidth - cornerSize, y: rect.top - cursorCenterY - borderWidth },
+                { x: rect.right - cursorCenterX + borderWidth - cornerSize, y: rect.bottom - cursorCenterY + borderWidth - cornerSize },
+                { x: rect.left - cursorCenterX - borderWidth, y: rect.bottom - cursorCenterY + borderWidth - cornerSize }
+            ];
+            
+            if (mouseX !== undefined && mouseY !== undefined) {
+                const targetCenterX = rect.left + rect.width / 2;
+                const targetCenterY = rect.top + rect.height / 2;
+                const mouseOffsetX = (mouseX - targetCenterX) * parallaxStrength;
+                const mouseOffsetY = (mouseY - targetCenterY) * parallaxStrength;
+                
+                offsets.forEach(offset => {
+                    offset.x += mouseOffsetX;
+                    offset.y += mouseOffsetY;
+                });
+            }
+            
+            corners.forEach((corner, index) => {
+                gsap.to(corner, {
+                    x: offsets[index].x,
+                    y: offsets[index].y,
+                    duration: 0.2,
+                    ease: 'power2.out'
+                });
+            });
+        };
+        
+        const resetCorners = () => {
+            const { cornerSize } = constants;
+            const positions = [
+                { x: -cornerSize * 1.5, y: -cornerSize * 1.5 },
+                { x: cornerSize * 0.5, y: -cornerSize * 1.5 },
+                { x: cornerSize * 0.5, y: cornerSize * 0.5 },
+                { x: -cornerSize * 1.5, y: cornerSize * 0.5 }
+            ];
+            
+            corners.forEach((corner, index) => {
+                gsap.to(corner, {
+                    x: positions[index].x,
+                    y: positions[index].y,
+                    duration: 0.3,
+                    ease: 'power3.out'
+                });
+            });
+        };
+        
+        const mouseMoveHandler = (e) => {
+            if (!cursorEnabled || !targetCursor) return;
+            gsap.to(targetCursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1,
+                ease: 'power3.out'
+            });
+        };
+        
+        const mouseDownHandler = () => {
+            if (!cursorEnabled) return;
+            gsap.to(cursorDot, { scale: 0.7, duration: 0.3 });
+            gsap.to(targetCursor, { scale: 0.9, duration: 0.2 });
+        };
+        
+        const mouseUpHandler = () => {
+            if (!cursorEnabled) return;
+            gsap.to(cursorDot, { scale: 1, duration: 0.3 });
+            gsap.to(targetCursor, { scale: 1, duration: 0.2 });
+        };
+        
+        const mouseOverHandler = (e) => {
+            if (!cursorEnabled) return;
+            const clickableSelector = 'a, button, .project, .back-to-top, .mobile-nav-toggle, [role="button"]';
+            const target = e.target.closest(clickableSelector);
+            
+            if (target && target !== activeTarget) {
+                activeTarget = target;
+                
+                if (spinAnimation) {
+                    spinAnimation.pause();
+                    gsap.set(targetCursor, { rotation: 0 });
+                }
+                
+                updateCorners(target);
+                
+                const mouseMoveOnTarget = (ev) => {
+                    updateCorners(target, ev.clientX, ev.clientY);
+                };
+                
+                const mouseLeaveFromTarget = () => {
+                    activeTarget = null;
+                    target.removeEventListener('mousemove', mouseMoveOnTarget);
+                    target.removeEventListener('mouseleave', mouseLeaveFromTarget);
+                    
+                    resetCorners();
+                    
+                    setTimeout(() => {
+                        if (!activeTarget && cursorEnabled) {
+                            startSpinning();
+                        }
+                    }, 50);
+                };
+                
+                target.addEventListener('mousemove', mouseMoveOnTarget);
+                target.addEventListener('mouseleave', mouseLeaveFromTarget);
+            }
+        };
+        
+        const enableCursor = () => {
+            if (!targetCursor) createCursor();
+            
+            cursorEnabled = true;
+            document.body.style.cursor = 'none';
+            targetCursor.classList.add('active');
+            cursorToggleBtn.classList.add('active');
+            startSpinning();
+            
+            window.addEventListener('mousemove', mouseMoveHandler);
+            window.addEventListener('mousedown', mouseDownHandler);
+            window.addEventListener('mouseup', mouseUpHandler);
+            window.addEventListener('mouseover', mouseOverHandler);
+            
+            localStorage.setItem('cursorEnabled', 'true');
+        };
+        
+        const disableCursor = () => {
+            cursorEnabled = false;
+            document.body.style.cursor = 'auto';
+            if (targetCursor) targetCursor.classList.remove('active');
+            cursorToggleBtn.classList.remove('active');
+            
+            if (spinAnimation) {
+                spinAnimation.kill();
+                spinAnimation = null;
+            }
+            
+            window.removeEventListener('mousemove', mouseMoveHandler);
+            window.removeEventListener('mousedown', mouseDownHandler);
+            window.removeEventListener('mouseup', mouseUpHandler);
+            window.removeEventListener('mouseover', mouseOverHandler);
+            
+            localStorage.setItem('cursorEnabled', 'false');
+        };
+        
+        // Toggle au clic
+        cursorToggleBtn.addEventListener('click', () => {
+            if (cursorEnabled) {
+                disableCursor();
+            } else {
+                enableCursor();
+            }
+        });
+        
+        // Charger la préférence
+        if (localStorage.getItem('cursorEnabled') === 'true') {
+            enableCursor();
+        }
+    } else {
+        // Cacher le bouton sur mobile
+        const cursorToggleBtn = document.getElementById('cursor-toggle');
+        if (cursorToggleBtn) cursorToggleBtn.style.display = 'none';
+    }
+    
     // Animation des liens de navigation (smooth scroll)
     const allNavLinks = document.querySelectorAll('nav a, .nav-link');
     
